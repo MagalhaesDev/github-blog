@@ -1,63 +1,29 @@
+import { formatDistanceToNow } from 'date-fns'
+import ptBR from 'date-fns/locale/pt-BR'
+import { useContext } from 'react'
+import { IssuesContext } from '../../../../contexts/IssuesContext'
 import { PreviewPostContainer, PreviewPostItem } from './styles'
 
 export function PreviewPost() {
+  const { issues } = useContext(IssuesContext)
+
   return (
     <PreviewPostContainer>
-      <PreviewPostItem>
-        <div>
-          <h2>Javascript data types and data structures</h2>
-          <p>Há 1 dia</p>
-        </div>
+      {issues.map((issue) => (
+        <PreviewPostItem key={issue.number}>
+          <div>
+            <h2>{issue.title}</h2>
+            <p>
+              {formatDistanceToNow(new Date(issue.created_at), {
+                addSuffix: true,
+                locale: ptBR,
+              })}
+            </p>
+          </div>
 
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam eius
-          fugit incidunt ducimus ipsam commodi possimus deserunt porro sit
-          officia recusandae suscipit dolorem expedita eos laborum temporibus,
-          optio nesciunt molestiae?
-        </p>
-      </PreviewPostItem>
-
-      <PreviewPostItem>
-        <div>
-          <h2>Javascript data types and data structures</h2>
-          <p>Há 1 dia</p>
-        </div>
-
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam eius
-          fugit incidunt ducimus ipsam commodi possimus deserunt porro sit
-          officia recusandae suscipit dolorem expedita eos laborum temporibus,
-          optio nesciunt molestiae?
-        </p>
-      </PreviewPostItem>
-
-      <PreviewPostItem>
-        <div>
-          <h2>Javascript data types and data structures</h2>
-          <p>Há 1 dia</p>
-        </div>
-
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam eius
-          fugit incidunt ducimus ipsam commodi possimus deserunt porro sit
-          officia recusandae suscipit dolorem expedita eos laborum temporibus,
-          optio nesciunt molestiae?
-        </p>
-      </PreviewPostItem>
-
-      <PreviewPostItem>
-        <div>
-          <h2>Javascript data types and data structures</h2>
-          <p>Há 1 dia</p>
-        </div>
-
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam eius
-          fugit incidunt ducimus ipsam commodi possimus deserunt porro sit
-          officia recusandae suscipit dolorem expedita eos laborum temporibus,
-          optio nesciunt molestiae?
-        </p>
-      </PreviewPostItem>
+          <p>{issue.body.substring(0, 175)}...</p>
+        </PreviewPostItem>
+      ))}
     </PreviewPostContainer>
   )
 }

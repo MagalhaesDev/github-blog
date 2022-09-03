@@ -32,7 +32,7 @@ export const PreviewPostItem = styled.div`
     justify-content: space-between;
 
     h2 {
-      flex-basis: 80%;
+      flex-basis: 65%;
       font-size: 1.25rem;
       font-weight: bold;
     }
