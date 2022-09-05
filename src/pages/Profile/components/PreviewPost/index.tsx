@@ -1,24 +1,19 @@
-import { formatDistanceToNow } from 'date-fns'
-import ptBR from 'date-fns/locale/pt-BR'
-import { useContext } from 'react'
-import { IssuesContext } from '../../../../contexts/IssuesContext'
+import { IssuesProps } from '../..'
+import { relativeDateFormatter } from '../../../../utils/formatter'
 import { PreviewPostContainer, PreviewPostItem } from './styles'
 
-export function PreviewPost() {
-  const { issues } = useContext(IssuesContext)
+interface PreviewPostProps {
+  issues: IssuesProps[]
+}
 
+export function PreviewPost({ issues }: PreviewPostProps) {
   return (
     <PreviewPostContainer>
       {issues.map((issue) => (
-        <PreviewPostItem key={issue.number}>
+        <PreviewPostItem key={issue.number} to={'post/' + issue.number}>
           <div>
             <h2>{issue.title}</h2>
-            <p>
-              {formatDistanceToNow(new Date(issue.created_at), {
-                addSuffix: true,
-                locale: ptBR,
-              })}
-            </p>
+            <p>{relativeDateFormatter(issue.created_at)}</p>
           </div>
 
           <p>{issue.body.substring(0, 175)}...</p>

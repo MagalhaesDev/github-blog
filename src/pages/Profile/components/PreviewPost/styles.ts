@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 export const PreviewPostContainer = styled.main`
@@ -12,12 +13,14 @@ export const PreviewPostContainer = styled.main`
   }
 `
 
-export const PreviewPostItem = styled.div`
+export const PreviewPostItem = styled(Link)`
   background-color: ${(props) => props.theme['gray-700']};
   padding: 2rem;
   border-radius: 10px;
   cursor: pointer;
   border: 2px solid transparent;
+  text-decoration: none;
+  color: ${(props) => props.theme['gray-300']};
 
   display: flex;
   flex-direction: column;
@@ -35,6 +38,7 @@ export const PreviewPostItem = styled.div`
       flex-basis: 65%;
       font-size: 1.25rem;
       font-weight: bold;
+      color: ${(props) => props.theme['gray-100']};
     }
 
     p {

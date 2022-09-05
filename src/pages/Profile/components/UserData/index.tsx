@@ -8,7 +8,8 @@ import {
 import { faGithub } from '@fortawesome/free-brands-svg-icons'
 
 import axios from 'axios'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { Spinner } from '../../../../components/Spinner'
 
 export interface GithubUserProps {
   id: string
@@ -21,45 +22,61 @@ export interface GithubUserProps {
 }
 
 export function UserData() {
-  const [user, setUser] = useState<GithubUserProps[]>([])
+  const [user, setUser] = useState<GithubUserProps>({} as GithubUserProps)
+  const [isLoading, setIsLoading] = useState(true)
+
+  const getProfileData = useCallback(async () => {
+    try {
+      setIsLoading(true)
+      const response = await axios.get(
+        'https://api.github.com/users/MagalhaesDev',
+      )
+
+      setUser(response.data)
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
 
   useEffect(() => {
-    const response = axios.get('https://api.github.com/users/MagalhaesDev')
-
-    response.then((response) => setUser([response.data]))
-  }, [])
+    getProfileData()
+  }, [getProfileData])
 
   return (
     <>
-      {user.map((data) => (
-        <UserDataContainer key={data.id}>
-          <ImageUser>
-            <img src={data.avatar_url} alt="" />
-          </ImageUser>
-          <InformationContainer>
-            <div>
-              <h1>{data.name}</h1>
+      <UserDataContainer key={user.id}>
+        {isLoading ? (
+          <Spinner />
+        ) : (
+          <>
+            <ImageUser>
+              <img src={user.avatar_url} alt="" />
+            </ImageUser>
+            <InformationContainer>
+              <div>
+                <h1>{user.name}</h1>
 
-              <a href={data.html_url} target="_blank" rel="noreferrer">
-                GITHUB
-                <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
-              </a>
-            </div>
-            <p>{data.bio}</p>
-            <div>
-              <span>
-                <FontAwesomeIcon icon={faGithub} />
-                <p>{data.login}</p>
-              </span>
+                <a href={user.html_url} target="_blank" rel="noreferrer">
+                  GITHUB
+                  <FontAwesomeIcon icon={faArrowUpRightFromSquare} />
+                </a>
+              </div>
+              <p>{user.bio}</p>
+              <div>
+                <span>
+                  <FontAwesomeIcon icon={faGithub} />
+                  <p>{user.login}</p>
+                </span>
 
-              <span>
-                <FontAwesomeIcon icon={faUserGroup} />
-                <p>{data.followers} seguidores</p>
-              </span>
-            </div>
-          </InformationContainer>
-        </UserDataContainer>
-      ))}
+                <span>
+                  <FontAwesomeIcon icon={faUserGroup} />
+                  <p>{user.followers} seguidores</p>
+                </span>
+              </div>
+            </InformationContainer>
+          </>
+        )}
+      </UserDataContainer>
     </>
   )
 }
